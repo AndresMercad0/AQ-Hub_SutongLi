@@ -1,0 +1,1442 @@
+[
+    {
+        "id": "28e25aef1a915684",
+        "type": "tab",
+        "label": "Weather Station",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "3659f57cc450c3d4",
+        "type": "split",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "splt": ",",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 230,
+        "y": 300,
+        "wires": [
+            [
+                "37bfca132fe586ee"
+            ]
+        ]
+    },
+    {
+        "id": "1d7b91c9a6c84feb",
+        "type": "change",
+        "z": "28e25aef1a915684",
+        "name": "to number",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$number(msg.payload)",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$String(msg.payload)",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 380,
+        "y": 300,
+        "wires": [
+            [
+                "c4cc708d6c780bb4"
+            ]
+        ]
+    },
+    {
+        "id": "37bfca132fe586ee",
+        "type": "switch",
+        "z": "28e25aef1a915684",
+        "name": "Message Splitter SN",
+        "property": "parts.index",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "3",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "4",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "5",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "6",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "7",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "8",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "9",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "10",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "11",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "12",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "13",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "14",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "15",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "16",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": true,
+        "outputs": 17,
+        "x": 580,
+        "y": 300,
+        "wires": [
+            [
+                "5086ed1d68667a33",
+                "846449f6db9fecf4"
+            ],
+            [
+                "37b5da1392cda604",
+                "2837cbfc94dd2a46"
+            ],
+            [
+                "cab2a80c168d96ab",
+                "fadcac93409af35b"
+            ],
+            [
+                "6494cf0ffedf304b",
+                "477f0df469a58a8f"
+            ],
+            [
+                "ca50dae7ae6be9fe"
+            ],
+            [
+                "0b276660d331ed05",
+                "99cf44cd9e5b4e80"
+            ],
+            [
+                "1ffb91f73aa41ff8",
+                "d6a708f715d5612a"
+            ],
+            [
+                "8eccd04884396363",
+                "a726ccf8fbcdde4a"
+            ],
+            [
+                "1098f535d7d3acb7"
+            ],
+            [
+                "e1717b3423bdc6ba"
+            ],
+            [
+                "e97a3fe91ed291a3"
+            ],
+            [
+                "15d1c0b922b3a3c7"
+            ],
+            [
+                "3f52d7901f0964de"
+            ],
+            [
+                "e6c27e211599cfe6"
+            ],
+            [
+                "43e9629ca443f408"
+            ],
+            [
+                "f3845eaa1c090471"
+            ],
+            [
+                "58607cd131887da7"
+            ]
+        ]
+    },
+    {
+        "id": "0327d66081fa0564",
+        "type": "comment",
+        "z": "28e25aef1a915684",
+        "name": "split",
+        "info": "Split comma separated string into separated messages.\nValue placed to msg.payload\nValue type will be still string.\n\nThere will be 4 messages out of this split node\n\nFor each msg also given a property \"parts\". \nIt will be used later on.",
+        "x": 230,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "5f89fed288a21008",
+        "type": "comment",
+        "z": "28e25aef1a915684",
+        "name": "convert",
+        "info": "Convert the value of msg.payload to the number using JSONata expression.\n",
+        "x": 370,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "a1c309d94997e473",
+        "type": "comment",
+        "z": "28e25aef1a915684",
+        "name": "route",
+        "info": "Route every message to differet output by using switch node.\nAs property \"parts\" has been given to each message, we can use its \n\"index\" property to find out proper output\n\n",
+        "x": 630,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "846449f6db9fecf4",
+        "type": "ui_gauge",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "group": "cdb1e6d07c5ef848",
+        "order": 2,
+        "width": "5",
+        "height": "5",
+        "gtype": "gage",
+        "title": "TEMPERATURE",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "25",
+        "seg2": "50",
+        "className": "",
+        "x": 1090,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "37b5da1392cda604",
+        "type": "ui_gauge",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "group": "cdb1e6d07c5ef848",
+        "order": 3,
+        "width": "5",
+        "height": "5",
+        "gtype": "gage",
+        "title": "% HUMIDITY",
+        "label": "%RH",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "50",
+        "seg2": "75",
+        "className": "",
+        "x": 1080,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "cab2a80c168d96ab",
+        "type": "ui_gauge",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "group": "cdb1e6d07c5ef848",
+        "order": 1,
+        "width": "5",
+        "height": "5",
+        "gtype": "gage",
+        "title": "PRESSURE",
+        "label": "Pa",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "2000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "500",
+        "seg2": "1000",
+        "className": "",
+        "x": 1070,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "477f0df469a58a8f",
+        "type": "ui_gauge",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "group": "cdb1e6d07c5ef848",
+        "order": 4,
+        "width": "5",
+        "height": "5",
+        "gtype": "gage",
+        "title": "VOC GAS LEVEL",
+        "label": "Ohms",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "1000",
+        "colors": [
+            "#ff0000",
+            "#e6e600",
+            "#1ff702"
+        ],
+        "seg1": "150",
+        "seg2": "300",
+        "className": "",
+        "x": 1090,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "9b9d83f69cc48521",
+        "type": "debug",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1330,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "5086ed1d68667a33",
+        "type": "function",
+        "z": "28e25aef1a915684",
+        "name": "db Temp",
+        "func": "msg.temp = msg.payload;\nmsg.topic = \"INSERT INTO sensordata (sensorid,topic,value) VALUES ('QMUL-WS-02','/QMUL/CSEE/B312/TEMP',\"+ msg.temp +\");\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1060,
+        "y": 80,
+        "wires": [
+            [
+                "31f9671db406cad8"
+            ]
+        ]
+    },
+    {
+        "id": "2837cbfc94dd2a46",
+        "type": "function",
+        "z": "28e25aef1a915684",
+        "name": "db humidity",
+        "func": "msg.temp = msg.payload;\nmsg.topic = \"INSERT INTO sensordata (sensorid,topic,value) VALUES ('QMUL-WS-02','/QMUL/CSEE/B312/HUMI',\"+ msg.temp +\");\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1070,
+        "y": 120,
+        "wires": [
+            [
+                "31f9671db406cad8"
+            ]
+        ]
+    },
+    {
+        "id": "fadcac93409af35b",
+        "type": "function",
+        "z": "28e25aef1a915684",
+        "name": "db pressure",
+        "func": "msg.temp = msg.payload;\nmsg.topic = \"INSERT INTO sensordata (sensorid,topic,value) VALUES ('QMUL-WS-02','/QMUL/CSEE/B312/PRES',\"+ msg.temp +\");\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1070,
+        "y": 160,
+        "wires": [
+            [
+                "31f9671db406cad8"
+            ]
+        ]
+    },
+    {
+        "id": "6494cf0ffedf304b",
+        "type": "function",
+        "z": "28e25aef1a915684",
+        "name": "db gas ",
+        "func": "msg.temp = msg.payload;\nmsg.topic = \"INSERT INTO sensordata (sensorid,topic,value) VALUES ('QMUL-WS-02','/QMUL/CSEE/B312/VOCG',\"+ msg.temp +\");\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1050,
+        "y": 200,
+        "wires": [
+            [
+                "31f9671db406cad8"
+            ]
+        ]
+    },
+    {
+        "id": "79f258695d9dbe25",
+        "type": "function",
+        "z": "28e25aef1a915684",
+        "name": "db wind speed",
+        "func": "msg.temp = msg.payload;\nmsg.topic = \"INSERT INTO sensordata (sensorid,topic,value) VALUES ('QMUL-WS-02','/QMUL/CSEE/B312/WS',\"+ msg.temp +\");\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1340,
+        "y": 860,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c881850a3edfc153",
+        "type": "function",
+        "z": "28e25aef1a915684",
+        "name": "db wind direction",
+        "func": "msg.temp = msg.payload;\nmsg.topic = \"INSERT INTO sensordata (sensorid,topic,value) VALUES ('QMUL-WS-02','/QMUL/CSEE/B312/WD',\"+ msg.temp +\");\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1350,
+        "y": 780,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "31f9671db406cad8",
+        "type": "mysql",
+        "z": "28e25aef1a915684",
+        "d": true,
+        "mydb": "6fa0bf3246bf4240",
+        "name": "db",
+        "x": 1290,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c4cc708d6c780bb4",
+        "type": "debug",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 570,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "ca50dae7ae6be9fe",
+        "type": "ui_gauge",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "group": "4fa11ce7444b6cb0",
+        "order": 5,
+        "width": "5",
+        "height": "5",
+        "gtype": "gage",
+        "title": "LIGHT SENSOR LDR",
+        "label": "mm",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "500",
+        "colors": [
+            "#ffffff",
+            "#b7b7b4",
+            "#000000"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "className": "",
+        "x": 1100,
+        "y": 1020,
+        "wires": []
+    },
+    {
+        "id": "0b276660d331ed05",
+        "type": "ui_gauge",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "group": "4fa11ce7444b6cb0",
+        "order": 6,
+        "width": "5",
+        "height": "5",
+        "gtype": "gage",
+        "title": "NH3",
+        "label": "ppm",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "10000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "500",
+        "seg2": "1000",
+        "className": "",
+        "x": 1050,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "75258836bf47e266",
+        "type": "function",
+        "z": "28e25aef1a915684",
+        "name": "db rain",
+        "func": "msg.temp = msg.payload;\nmsg.topic = \"INSERT INTO sensordata (sensorid,topic,value) VALUES ('QMUL-WS-02','/QMUL/CSEE/B312/RR',\"+ msg.temp +\");\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1310,
+        "y": 820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1ffb91f73aa41ff8",
+        "type": "ui_gauge",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "group": "4fa11ce7444b6cb0",
+        "order": 7,
+        "width": "5",
+        "height": "5",
+        "gtype": "gage",
+        "title": "CO",
+        "label": "ppm",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "5000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "500",
+        "seg2": "1000",
+        "className": "",
+        "x": 1050,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "8eccd04884396363",
+        "type": "ui_gauge",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "group": "4fa11ce7444b6cb0",
+        "order": 8,
+        "width": "5",
+        "height": "5",
+        "gtype": "gage",
+        "title": "NO2",
+        "label": "ppm",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "2000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "500",
+        "seg2": "1000",
+        "className": "",
+        "x": 1050,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "1098f535d7d3acb7",
+        "type": "ui_gauge",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "group": "4fa11ce7444b6cb0",
+        "order": 12,
+        "width": "5",
+        "height": "5",
+        "gtype": "gage",
+        "title": "C3H8",
+        "label": "ppm",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "500",
+        "seg2": "1000",
+        "className": "",
+        "x": 1050,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "e1717b3423bdc6ba",
+        "type": "ui_gauge",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "group": "4fa11ce7444b6cb0",
+        "order": 16,
+        "width": "5",
+        "height": "5",
+        "gtype": "gage",
+        "title": "C4H10",
+        "label": "ppm",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "500",
+        "seg2": "1000",
+        "className": "",
+        "x": 1060,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "e97a3fe91ed291a3",
+        "type": "ui_gauge",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "group": "4fa11ce7444b6cb0",
+        "order": 10,
+        "width": "5",
+        "height": "5",
+        "gtype": "gage",
+        "title": "CH4",
+        "label": "ppm",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "1000000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "500",
+        "seg2": "1000",
+        "className": "",
+        "x": 1050,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "15d1c0b922b3a3c7",
+        "type": "ui_gauge",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "group": "4fa11ce7444b6cb0",
+        "order": 9,
+        "width": "5",
+        "height": "5",
+        "gtype": "gage",
+        "title": "H2",
+        "label": "ppm",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "10000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "2500",
+        "seg2": "5000",
+        "className": "",
+        "x": 1050,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "3f52d7901f0964de",
+        "type": "ui_gauge",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "group": "4fa11ce7444b6cb0",
+        "order": 11,
+        "width": "5",
+        "height": "5",
+        "gtype": "gage",
+        "title": "C2H5OH",
+        "label": "ppm",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "10000",
+        "seg2": "50000",
+        "className": "",
+        "x": 1060,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "80bdacd875c36bde",
+        "type": "ui_gauge",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "group": "dbfc4352185bf301",
+        "order": 1,
+        "width": "5",
+        "height": "5",
+        "gtype": "gage",
+        "title": "WIND SPEED",
+        "label": "KM/H",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "25",
+        "seg2": "50",
+        "className": "",
+        "x": 1080,
+        "y": 1100,
+        "wires": []
+    },
+    {
+        "id": "2e5260d5c88d94df",
+        "type": "ui_gauge",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "group": "dbfc4352185bf301",
+        "order": 2,
+        "width": "5",
+        "height": "5",
+        "gtype": "gage",
+        "title": "RAIN RATE",
+        "label": "mm",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "25",
+        "seg2": "50",
+        "className": "",
+        "x": 1070,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "b85baaab3b5a3686",
+        "type": "serial in",
+        "z": "28e25aef1a915684",
+        "d": true,
+        "name": "",
+        "serial": "a8e3dcb738349c22",
+        "x": 90,
+        "y": 700,
+        "wires": [
+            [
+                "0d26401aecc07fbf"
+            ]
+        ]
+    },
+    {
+        "id": "89ec97a15d475c17",
+        "type": "ui_text",
+        "z": "28e25aef1a915684",
+        "group": "dbfc4352185bf301",
+        "order": 3,
+        "width": "5",
+        "height": "1",
+        "name": "",
+        "label": "WD",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "x": 1050,
+        "y": 1180,
+        "wires": []
+    },
+    {
+        "id": "42719b42f62f706b",
+        "type": "serial in",
+        "z": "28e25aef1a915684",
+        "d": true,
+        "name": "",
+        "serial": "7dcbac4abf604cad",
+        "x": 90,
+        "y": 300,
+        "wires": [
+            [
+                "3659f57cc450c3d4"
+            ]
+        ]
+    },
+    {
+        "id": "7f40901e29151bc2",
+        "type": "debug",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1070,
+        "y": 1220,
+        "wires": []
+    },
+    {
+        "id": "d8db4057889d19cc",
+        "type": "debug",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1070,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "0d26401aecc07fbf",
+        "type": "split",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "splt": ",",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 230,
+        "y": 700,
+        "wires": [
+            [
+                "a930ea0d562d2d6c"
+            ]
+        ]
+    },
+    {
+        "id": "c860d430dd0b0279",
+        "type": "change",
+        "z": "28e25aef1a915684",
+        "name": "to number",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$number(msg.payload)",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$String(msg.payload)",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 380,
+        "y": 700,
+        "wires": [
+            [
+                "6f481210fd4a2bcd"
+            ]
+        ]
+    },
+    {
+        "id": "a930ea0d562d2d6c",
+        "type": "switch",
+        "z": "28e25aef1a915684",
+        "name": "Message Splitter SN",
+        "property": "parts.index",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "3",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "4",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "5",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "6",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "7",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "8",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "9",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "10",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "11",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "12",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": true,
+        "outputs": 13,
+        "x": 580,
+        "y": 700,
+        "wires": [
+            [
+                "d8db4057889d19cc",
+                "2e5260d5c88d94df"
+            ],
+            [
+                "d8db4057889d19cc",
+                "80bdacd875c36bde"
+            ],
+            [
+                "89ec97a15d475c17",
+                "d8db4057889d19cc"
+            ],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "e2d5c61516032c70",
+        "type": "comment",
+        "z": "28e25aef1a915684",
+        "name": "split",
+        "info": "Split comma separated string into separated messages.\nValue placed to msg.payload\nValue type will be still string.\n\nThere will be 4 messages out of this split node\n\nFor each msg also given a property \"parts\". \nIt will be used later on.",
+        "x": 230,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "1bd4f278d3533aef",
+        "type": "comment",
+        "z": "28e25aef1a915684",
+        "name": "convert",
+        "info": "Convert the value of msg.payload to the number using JSONata expression.\n",
+        "x": 370,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "a25b15bb744ef2c0",
+        "type": "comment",
+        "z": "28e25aef1a915684",
+        "name": "route",
+        "info": "Route every message to differet output by using switch node.\nAs property \"parts\" has been given to each message, we can use its \n\"index\" property to find out proper output\n\n",
+        "x": 630,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "6f481210fd4a2bcd",
+        "type": "debug",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 570,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "99cf44cd9e5b4e80",
+        "type": "ui_chart",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "group": "4fa11ce7444b6cb0",
+        "order": 13,
+        "width": 0,
+        "height": 0,
+        "label": "NH3",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "86400",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1050,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d6a708f715d5612a",
+        "type": "ui_chart",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "group": "4fa11ce7444b6cb0",
+        "order": 14,
+        "width": 0,
+        "height": 0,
+        "label": "CO",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "86400",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1050,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a726ccf8fbcdde4a",
+        "type": "ui_chart",
+        "z": "28e25aef1a915684",
+        "name": "",
+        "group": "4fa11ce7444b6cb0",
+        "order": 15,
+        "width": 0,
+        "height": 0,
+        "label": "NO2",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "86400",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1050,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e6c27e211599cfe6",
+        "type": "ui_gauge",
+        "z": "28e25aef1a915684",
+        "name": "Dust Sensor (PPD42NS) ",
+        "group": "4fa11ce7444b6cb0",
+        "order": 1,
+        "width": "5",
+        "height": "5",
+        "gtype": "gage",
+        "title": "Dust Sensor (PPD42NS) ",
+        "label": "ppm",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "10000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "10000",
+        "seg2": "50000",
+        "className": "",
+        "x": 1110,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "58607cd131887da7",
+        "type": "ui_gauge",
+        "z": "28e25aef1a915684",
+        "name": "UV Index (SI1145)",
+        "group": "4fa11ce7444b6cb0",
+        "order": 2,
+        "width": "5",
+        "height": "5",
+        "gtype": "gage",
+        "title": "UV Index (SI1145)",
+        "label": "ppm",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "15",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "10000",
+        "seg2": "50000",
+        "className": "",
+        "x": 1090,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "43e9629ca443f408",
+        "type": "ui_gauge",
+        "z": "28e25aef1a915684",
+        "name": "Visible Light (SI1145)",
+        "group": "4fa11ce7444b6cb0",
+        "order": 4,
+        "width": "5",
+        "height": "5",
+        "gtype": "gage",
+        "title": "Visible Light (SI1145)",
+        "label": "ppm",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "5000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "1000",
+        "seg2": "2500",
+        "className": "",
+        "x": 1100,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "f3845eaa1c090471",
+        "type": "ui_gauge",
+        "z": "28e25aef1a915684",
+        "name": "IR Sensor (SI1145)",
+        "group": "4fa11ce7444b6cb0",
+        "order": 3,
+        "width": "5",
+        "height": "5",
+        "gtype": "gage",
+        "title": "IR Sensor (SI1145)",
+        "label": "ppm",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "5000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "1000",
+        "seg2": "2500",
+        "className": "",
+        "x": 1090,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "cdb1e6d07c5ef848",
+        "type": "ui_group",
+        "name": "BME-680",
+        "tab": "58d5fa7d25fe03f8",
+        "order": 2,
+        "disp": true,
+        "width": "10",
+        "collapse": true,
+        "className": ""
+    },
+    {
+        "id": "6fa0bf3246bf4240",
+        "type": "MySQLdatabase",
+        "name": "Local Database",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "iotdata_db",
+        "tz": "00:00",
+        "charset": "UTF8"
+    },
+    {
+        "id": "4fa11ce7444b6cb0",
+        "type": "ui_group",
+        "name": "MULTI GAS SENSORS",
+        "tab": "58d5fa7d25fe03f8",
+        "order": 1,
+        "disp": true,
+        "width": "10",
+        "collapse": true,
+        "className": ""
+    },
+    {
+        "id": "dbfc4352185bf301",
+        "type": "ui_group",
+        "name": "WEATHER STATION",
+        "tab": "58d5fa7d25fe03f8",
+        "order": 3,
+        "disp": true,
+        "width": "10",
+        "collapse": true,
+        "className": ""
+    },
+    {
+        "id": "a8e3dcb738349c22",
+        "type": "serial-port",
+        "serialport": "COM14",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": "",
+        "responsetimeout": "10000"
+    },
+    {
+        "id": "7dcbac4abf604cad",
+        "type": "serial-port",
+        "serialport": "COM18",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": "",
+        "responsetimeout": "10000"
+    },
+    {
+        "id": "58d5fa7d25fe03f8",
+        "type": "ui_tab",
+        "name": "QMUL LL PROJECT (WEATHER STATION)",
+        "icon": "dashboard",
+        "order": 3,
+        "disabled": false,
+        "hidden": false
+    }
+]
