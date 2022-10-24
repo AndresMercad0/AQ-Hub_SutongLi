@@ -121,7 +121,7 @@ void getAndSendTemperatureAndHumidityData()
   WS_LDR_LS 			= (float)(1023 - value) * 5 / value;
 
   alt = altitude(pressure);                				// temp altitude
-  BME680C_ALT = (temperatureCompensatedAltitude(pressure, temp/100.0/*, 1022.0*/),2);
+  //BME680C_ALT = (temperatureCompensatedAltitude(pressure, temp/100.0/*, 1022.0*/),2);
 
 
 

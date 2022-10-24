@@ -1,0 +1,9 @@
+Grove - Temperature Humidity Pressure Gas Sensor(BME680)
+https://wiki.seeedstudio.com/Grove-Temperature_Humidity_Pressure_Gas_Sensor_BME680/
+
+Grove - Multichannel Gas Sensor
+https://wiki.seeedstudio.com/Grove-Multichannel_Gas_Sensor/
+
+Adafruit SI1145 Breakout Board - UV index / IR / Visible Sensor
+https://learn.adafruit.com/adafruit-si1145-breakout-board-uv-ir-visible-sensor
+

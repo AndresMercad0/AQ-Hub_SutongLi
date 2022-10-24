@@ -1,0 +1,40 @@
+---------------------------------------
+| Multichanel Gas Sensor v1.0 - GROVE |
+---------------------------------------
+Tutorial link: https://wiki.seeedstudio.com/Grove-Multichannel_Gas_Sensor/
+Datasheet sensor: https://www.sgxsensortech.com/content/uploads/2015/02/1143_Datasheet-MiCS-6814-rev-8.pdf
+Library: https://github.com/Seeed-Studio/Mutichannel_Gas_Sensor
+Connection: I2C
+This sensor reads:
+    * The concentration of NH3 is 3.59 ppm
+    * The concentration of CO is 92.65 ppm
+    * The concentration of NO2 is 0.09 ppm
+    * The concentration of C3H8 is 7006.84 ppm
+    * The concentration of C4H10 is 3350.42 ppm
+    * The concentration of CH4 is 50452196.00 ppm
+    * The concentration of H2 is 76.92 ppm
+    * The concentration of C2H5OH is 89.97 ppm
+Additional notes:
+    * The sensor need to preheat at least 10 minutes before getting a stable data.
+    * Arduino Uno Wifi Rev2 -> #error "Architecture not matched"
+    * Arduino Uno -> Not errors
+
+
+-------------------------------------------------------------------
+| Temperature, Humidity, Pressure and Gas Sensor (BME680) - GROVE |
+-------------------------------------------------------------------
+Tutorial link: https://wiki.seeedstudio.com/Grove-Temperature_Humidity_Pressure_Gas_Sensor_BME680/
+Datasheet sensor: https://www.bosch-sensortec.com/products/environmental-sensors/gas-sensors/bme680/
+Library: https://github.com/Seeed-Studio/Seeed_BME680
+Connection: I2C
+This sensor reads:
+    * Temperature ===>> 25.50 C
+    * Pressure ===>> 100.39 KPa
+    * Humidity ===>> 62.35 %
+    * Gas ===>> 23.09 Kohms
+Additional notes:
+    * Gas measurements do not work well with the Arduino UNO, only with ATmega2560 based boards.
+        -> The 'gas' means air quality which is mainly affected by the VOCs (volatile organic compounds) gas. At this time Augest 8,2018, this module do not support gas mearsue for some Arduino board. It is only available for the Arduino board with the large memory arduino platform like ATMEGA2560. If you use other arduino platform, like: arduino uno, seeedunio v4.2... the gas value you get is not accurate.
+    * The sensor needs to be calibrated for 5 days when it first uses.The sensor value is not accurate before/during calibration.
+    * Need to wait about 2mins after module power on that gas heater enter a steady state.The gas value at this time is correct
+    * The IAQ value corresponding air quality: 0-50 - good 51-100 - average 101-150 - little bad 151-200 - bad 201-300 - worse 301-500 - very bad
