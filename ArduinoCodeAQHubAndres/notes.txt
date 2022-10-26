@@ -60,3 +60,25 @@ This sensor reads:
 
 Additional notes:
     * 
+
+--------------------------
+| CO Monitor MQ-7 Sensor | -> It is not necessary to connect this sensor as the Multichanel Gas Sensor v1.0 - GROVE already reads CO
+--------------------------
+Tutorial link: https://electropeak.com/learn/interfacing-mq-7-smoke-gas-sensor-module-with-arduino/
+Datasheet sensor: https://www.sparkfun.com/datasheets/Sensors/Biometric/MQ-7.pdf
+Connection: ADC
+This sensor reads:
+    * Carbon Monoxide (CO) Gas
+Additional notes:
+    * It is not necessary to connect this sensor as the Multichanel Gas Sensor v1.0 - GROVE already reads CO
+
+-----------------------------
+| CO2 Monitor MQ-135 Sensor |
+-----------------------------
+Tutorial link: https://www.hackster.io/sheekar/mq-135-sensor-co2-benzyne-with-arduino-sheekar-banerjee-ab6ccd
+Datasheet sensor: https://www.sparkfun.com/datasheets/Sensors/Biometric/MQ-7.pdf
+Connection: ADC
+This sensor reads:
+    * Carbon Dioxide (CO2) Gas
+Additional notes:
+    * 

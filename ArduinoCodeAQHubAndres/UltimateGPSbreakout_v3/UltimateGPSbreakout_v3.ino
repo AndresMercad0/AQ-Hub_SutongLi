@@ -20,8 +20,8 @@ struct gpsValues{
   bool dataGPS;
 };
 // you can change the pin numbers to match your wiring:
-#define txGpsPin  3
-#define rxGpsPin  2
+#define txGpsPin  7
+#define rxGpsPin  8
 
 SoftwareSerial mySerial(txGpsPin, rxGpsPin);
 Adafruit_GPS GPS(&mySerial);

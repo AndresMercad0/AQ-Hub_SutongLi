@@ -16,7 +16,7 @@ Seeed_BME680 bme680(IIC_ADDR); /* IIC PROTOCOL */
 //Seeed_BME680 bme680(BME_CS, BME_MOSI, BME_MISO,  BME_SCK);/*SPI PROTOCOL*/
 
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(115200);
     while (!Serial);
     Serial.println("Serial start!!!");
     delay(100);
@@ -31,24 +31,26 @@ void loop() {
         Serial.println("Failed to perform reading :(");
         return;
     }
-    Serial.print("temperature ===>> ");
-    Serial.print(bme680.sensor_result_value.temperature);
-    Serial.println(" C");
+    else {
+      Serial.print("temperature ===>> ");
+      Serial.print(bme680.sensor_result_value.temperature);
+      Serial.println(" C");
 
-    Serial.print("pressure ===>> ");
-    Serial.print(bme680.sensor_result_value.pressure / 1000.0);
-    Serial.println(" KPa");
+      Serial.print("pressure ===>> ");
+      Serial.print(bme680.sensor_result_value.pressure / 1000.0);
+      Serial.println(" KPa");
 
-    Serial.print("humidity ===>> ");
-    Serial.print(bme680.sensor_result_value.humidity);
-    Serial.println(" %");
+      Serial.print("humidity ===>> ");
+      Serial.print(bme680.sensor_result_value.humidity);
+      Serial.println(" %");
 
-    Serial.print("gas ===>> ");
-    Serial.print(bme680.sensor_result_value.gas / 1000.0);
-    Serial.println(" Kohms");
+      Serial.print("gas ===>> ");
+      Serial.print(bme680.sensor_result_value.gas / 1000.0);
+      Serial.println(" Kohms");
 
-    Serial.println();
-    Serial.println();
+      Serial.println();
+      Serial.println();
+    }
 
     delay(2000);
 }
