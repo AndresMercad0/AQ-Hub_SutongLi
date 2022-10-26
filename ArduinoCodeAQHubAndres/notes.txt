@@ -38,3 +38,25 @@ Additional notes:
     * The sensor needs to be calibrated for 5 days when it first uses.The sensor value is not accurate before/during calibration.
     * Need to wait about 2mins after module power on that gas heater enter a steady state.The gas value at this time is correct
     * The IAQ value corresponding air quality: 0-50 - good 51-100 - average 101-150 - little bad 151-200 - bad 201-300 - worse 301-500 - very bad
+
+
+----------------------------
+| Ultimate GPS breakout v3 |
+----------------------------
+Tutorial link: https://learn.adafruit.com/adafruit-ultimate-gps/arduino-wiring
+Library: To install, use the Arduino Library Manager to search for 'Adafruit GPS' and install the library. More information-> https://github.com/adafruit/Adafruit_GPS
+Connection: TTL serial
+This sensor reads:
+    * Time: 9:22:59.0
+    * Date: 26/10/2022
+    * Fix: 1
+    * Quality: 1
+    * Satellites: 5
+    * Location: 5131.4067N, 2.5847W
+    * Google Maps location: 51.5234, -0.0431
+    * Speed (knots): 0.03
+    * Heading: 147.95
+    * Altitude: 23.80
+
+Additional notes:
+    * 
