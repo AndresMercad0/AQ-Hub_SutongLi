@@ -1,3 +1,20 @@
+/*
+  BOARD:            Arduino UNO
+  PINOUT:           https://docs.arduino.cc/static/2b141eb1cfe6f465a949c203e4af1b5f/A000066-pinout.png
+  AUTHOR:           Andrés A. Mercado V.
+  LOCATION:         IoT Lab at Queen Mary University of London
+  REPO/CODE:        https://github.com/AndresMercad0/AQ-Hub_SutongLi.git
+  
+  ------------------------------------------
+  | Devices/Sensors connected to the board |
+  ------------------------------------------
+  - Multichanel Gas Sensor v1.0 - GROVE                                 =>    https://wiki.seeedstudio.com/Grove-Multichannel_Gas_Sensor/
+  - Temperature, Humidity, Pressure and Gas Sensor (BME680) - GROVE     =>    https://wiki.seeedstudio.com/Grove-Temperature_Humidity_Pressure_Gas_Sensor_BME680/
+  - Ultimate GPS breakout v3                                            =>    https://learn.adafruit.com/adafruit-ultimate-gps/arduino-wiring
+  - CO2 Monitor MQ-135 Sensor                                           =>    https://www.hackster.io/sheekar/mq-135-sensor-co2-benzyne-with-arduino-sheekar-banerjee-ab6ccd
+*/
+
+
 /*************
  * LIBRARIES *
  *************/
@@ -59,7 +76,7 @@ void setup()
  *************************************/
 void loop()
 {
-  delay(5000); // Sends data every +20 seconds
+  delay(20000); // Sends data every +20 seconds
   Serial.println(F("*{")); // Beginning of the frame to be sent by serial
 
   // --- Read Multichanel Gas Sensor ------------------------------------------------------------------------
@@ -81,11 +98,11 @@ void loop()
   Serial.print(F("\"H2\":"));if (a >= 0) {Serial.print(a);} else {Serial.print(F("0"));}Serial.print(F(","));
   a = gas.measure_C2H5OH(); // units -> ppm
   Serial.print(F("\"C2H5OH\":"));if (a >= 0) {Serial.print(a);} else {Serial.print(F("0"));}
-  Serial.println(F("}")); // units -> ppm
+  Serial.println(F("},")); // units -> ppm
 
   // --- Read BME680 Grove Sensor ------------------------------------------------------------------------
   if (bme680.read_sensor_data()) {
-    Serial.println(F("\"bme680\":{\"temp\":0,\"pressure\":0,\"humidity\":0,\"gas\":0}"));
+    Serial.println(F("\"bme680\":{\"temp\":0,\"pressure\":0,\"humidity\":0,\"gas\":0},"));
   }
   else {
     Serial.print(F("\"bme680\":{"));
@@ -98,14 +115,14 @@ void loop()
     Serial.print(F("\"humidity\":"));Serial.print(b);Serial.print(F(","));
     b = bme680.sensor_result_value.gas / 1000; // units -> Kohms
     Serial.print(F("\"gas\":"));Serial.print(b);
-    Serial.println(F("}"));
+    Serial.println(F("},"));
   }
 
   // --- Read CO2-MQ-135 Sensor ------------------------------------------------------------------------
   float c = analogRead(A0); // units -> ppm
   Serial.print(F("\"CO2MQ135\":{"));
   Serial.print(F("\"CO2\":"));Serial.print(c);
-  Serial.println(F("}"));
+  Serial.println(F("},"));
 
   /**************
    *  READ GPS  *
