@@ -82,3 +82,26 @@ This sensor reads:
     * Carbon Dioxide (CO2) Gas
 Additional notes:
     * 
+
+-------------------
+| Sensirion SPS30 |
+-------------------
+Tutorial link: https://www.instructables.com/How-To-Sensirion-SPS30/
+Datasheet sensor: https://sensirion.com/products/catalog/SPS30/
+Library: To install, use the Arduino Library Manager to search for 'SPS30' and install the library called "sensirion-sps"
+Connection: I2C
+This sensor reads:
+    * PM  1.0: 2.20
+    * PM  2.5: 2.35
+    * PM  4.0: 2.37
+    * PM 10.0: 2.38
+    * NC  0.5: 14.97
+    * NC  1.0: 17.47
+    * NC  2.5: 17.54
+    * NC  4.0: 17.55
+    * NC 10.0: 17.55
+
+
+Additional notes:
+    * More information about PM and sensor:
+        https://community.element14.com/challenges-projects/design-challenges/just-encase/b/blog/posts/particulate-matter-monitoring-system-for-wildfires---2-material-procurement-and-sensor-testing
