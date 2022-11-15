@@ -1,18 +1,12 @@
-/*|----------------------------------------------------------|*/
-/*|WORKING EXAMPLE FOR HTTP CONNECTION                      |*/
-/*|EMAIL: martinius96@gmail.com                              |*/
-/*|TESTED BOARDS: Devkit v1 DOIT, Devkitc v4                 |*/
-/*|CORE: June 2018                                           |*/
-/*|----------------------------------------------------------|*/
-#include <WiFi.h> //Wifi library
+#include <WiFi.h>
 #include "esp_wpa2.h" //wpa2 library for connections to Enterprise networks
-#define EAP_ANONYMOUS_IDENTITY "abc123@qmul.ac.uk"
-#define EAP_IDENTITY "abc123@qmul.ac.uk"
-#define EAP_PASSWORD "password"
+#define EAP_IDENTITY "acw700@qmul.ac.uk" //if connecting from another corporation, use identity@organisation.domain in Eduroam 
+#define EAP_USERNAME "acw700@qmul.ac.uk" //oftentimes just a repeat of the identity
+#define EAP_PASSWORD "J4EzMrmXf8z7N" //your Eduroam password
 const char* ssid = "eduroam"; // Eduroam SSID
 const char* host = "google.com"; //external server domain for HTTP connection after authentification
 int counter = 0;
-WiFiClient client;
+
 void setup() {
   Serial.begin(115200);
   delay(10);
@@ -21,12 +15,17 @@ void setup() {
   Serial.println(ssid);
   WiFi.disconnect(true);  //disconnect form wifi to set new wifi connection
   WiFi.mode(WIFI_STA); //init wifi mode
-  esp_wifi_sta_wpa2_ent_set_identity((uint8_t *)EAP_ANONYMOUS_IDENTITY, strlen(EAP_ANONYMOUS_IDENTITY)); 
-  esp_wifi_sta_wpa2_ent_set_username((uint8_t *)EAP_IDENTITY, strlen(EAP_IDENTITY));
-  esp_wifi_sta_wpa2_ent_set_password((uint8_t *)EAP_PASSWORD, strlen(EAP_PASSWORD));
-  esp_wpa2_config_t config = WPA2_CONFIG_INIT_DEFAULT(); //set config settings to default
-  esp_wifi_sta_wpa2_ent_enable(&config); //set config settings to enable function
-  WiFi.begin(ssid); //connect to wifi
+  
+  // Example1 (most common): a cert-file-free eduroam with PEAP (or TTLS)
+  WiFi.begin(ssid, WPA2_AUTH_PEAP, EAP_IDENTITY, EAP_USERNAME, EAP_PASSWORD);
+
+  // Example 2: a cert-file WPA2 Enterprise with PEAP
+  //WiFi.begin(ssid, WPA2_AUTH_PEAP, EAP_IDENTITY, EAP_USERNAME, EAP_PASSWORD, ca_pem, client_cert, client_key);
+  
+  // Example 3: TLS with cert-files and no password
+  //WiFi.begin(ssid, WPA2_AUTH_TLS, EAP_IDENTITY, NULL, NULL, ca_pem, client_cert, client_key);
+  
+  
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
@@ -58,9 +57,10 @@ void loop() {
   }
   Serial.print("Connecting to website: ");
   Serial.println(host);
+  WiFiClient client;
   if (client.connect(host, 80)) {
     String url = "/rele/rele1.txt";
-    client.print(String("GET ") + url + " HTTP/1.1\r\n" + "Host: " + host + "\r\n" + "User-Agent: NodeMCU\r\n" + "Connection: close\r\n\r\n");
+    client.print(String("GET ") + url + " HTTP/1.1\r\n" + "Host: " + host + "\r\n" + "User-Agent: ESP32\r\n" + "Connection: close\r\n\r\n");
 
     while (client.connected()) {
       String line = client.readStringUntil('\n');
@@ -73,4 +73,5 @@ void loop() {
   }else{
       Serial.println("Connection unsucessful");
     }  
+  delay(2000);
 }
