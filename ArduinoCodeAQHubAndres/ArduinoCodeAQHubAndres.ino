@@ -34,7 +34,7 @@
 /********************
  * GLOBAL CONSTANTS *
  ********************/
- // -------- GPS --------
+// -------- GPS --------
 #define txGpsPin  7 // to TX GPS
 #define rxGpsPin  8 // to RX GPS
 SoftwareSerial mySerial(txGpsPin, rxGpsPin);
@@ -147,14 +147,14 @@ void loop()
         Serial.print(F("\"PM-1.0\":"));Serial.print(m.mc_1p0);Serial.print(F(","));
         Serial.print(F("\"PM-2.5\":"));Serial.print(m.mc_2p5);Serial.print(F(","));
         Serial.print(F("\"PM-4.0\":"));Serial.print(m.mc_4p0);Serial.print(F(","));
-        Serial.print(F("\"PM-10.0\":"));Serial.print(m.mc_10p0);
+        Serial.print(F("\"PM-10\":"));Serial.print(m.mc_10p0);
         #ifndef SPS30_LIMITED_I2C_BUFFER_SIZE
           Serial.print(F(","));
           Serial.print(F("\"NC-0.5\":"));Serial.print(m.nc_0p5);Serial.print(F(","));
           Serial.print(F("\"NC-1.0\":"));Serial.print(m.nc_1p0);Serial.print(F(","));
           Serial.print(F("\"NC-2.5\":"));Serial.print(m.nc_2p5);Serial.print(F(","));
           Serial.print(F("\"NC-4.0\":"));Serial.print(m.nc_4p0);Serial.print(F(","));
-          Serial.print(F("\"NC-10.0\":"));Serial.print(m.nc_10p0);Serial.print(F(","));
+          Serial.print(F("\"NC-10\":"));Serial.print(m.nc_10p0);Serial.print(F(","));
           Serial.print(F("\"NC-Typical_partical_size\":"));Serial.print(m.typical_particle_size);
         #endif
       /*
