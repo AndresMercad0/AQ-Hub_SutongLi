@@ -1,6 +1,6 @@
 /*
-  BOARD:            Arduino UNO
-  PINOUT:           https://docs.arduino.cc/static/2b141eb1cfe6f465a949c203e4af1b5f/A000066-pinout.png
+  BOARD:            ESP32 Dev kit v1
+  PINOUT:           https://www.mischianti.org/wp-content/uploads/2020/11/ESP32-DOIT-DEV-KIT-v1-pinout-mischianti.png
   AUTHOR:           Andrés A. Mercado V.
   LOCATION:         IoT Lab at Queen Mary University of London
   REPO/CODE:        https://github.com/AndresMercad0/AQ-Hub_SutongLi.git
@@ -8,103 +8,120 @@
   ------------------------------------------
   | Devices/Sensors connected to the board |
   ------------------------------------------
-  - Multichanel Gas Sensor v1.0 - GROVE                                 =>    https://wiki.seeedstudio.com/Grove-Multichannel_Gas_Sensor/
-  - Temperature, Humidity, Pressure and Gas Sensor (BME680) - GROVE     =>    https://wiki.seeedstudio.com/Grove-Temperature_Humidity_Pressure_Gas_Sensor_BME680/
-  - Ultimate GPS breakout v3                                            =>    https://learn.adafruit.com/adafruit-ultimate-gps/arduino-wiring
-  - CO2 Monitor MQ-135 Sensor                                           =>    https://www.hackster.io/sheekar/mq-135-sensor-co2-benzyne-with-arduino-sheekar-banerjee-ab6ccd
-  - Sensirion SPS30                                                     =>    https://sensirion.com/products/catalog/SPS30/
+  ------------- BME680 ---------
+  * Pinout     =>      https://lastminuteengineers.com/bme680-gas-pressure-humidity-temperature-sensor-arduino-tutorial/
+  * Tutorial   =>      https://randomnerdtutorials.com/esp32-bme680-sensor-arduino/
+  * Library    =>      Manage Libraries, search for “adafruit bme680” on the Search box and install the library.
+  *   BME680         ESP32
+  *   1 VCC -------- 3V3
+  *   2 GND -------- GND
+  *   3 SCL -------- D22
+  *   4 SDA -------- D21
+  *
+  ------------- SGP40 ---------
+  * Pinout     =>      https://learn.adafruit.com/adafruit-sgp40?view=all
+  * Tutorial   =>      https://learn.adafruit.com/adafruit-sgp40?view=all
+  * Library    =>      Manage Libraries, search for “adafruit sgp40” on the Search box and install the library.
+  *   BME680         ESP32
+  *   1 VCC -------- 3V3
+  *   2 GND -------- GND
+  *   3 SCL -------- D22
+  *   4 SDA -------- D21
+  *
+  ------------- SPS30 ---------
+  * Pinout     =>      https://content.instructables.com/FNQ/COYH/L8RCTAW2/FNQCOYHL8RCTAW2.jpg?auto=webp&frame=1&fit=bounds&md=2a25b8235ace72558c2e3fd44a2d2087
+  * Tutorial   =>      https://github.com/paulvha/sps30/blob/master/examples/Example1_sps30_BasicReadings/Example1_sps30_BasicReadings.ino
+  * Library    =>      https://github.com/paulvha/sps30
+  *  SPS30          ESP32
+  *  1 VCC -------- 5v_USB
+  *  2 RX  -------- TX  GPIO 26
+  *  3 TX  -------- RX  GPIO 25
+  *  4 Select      (NOT CONNECTED)
+  *  5 GND -------- GND
+  * 
+  ------------- Ultimate GPS breakout v3  ---------
+  * Pinout     =>      https://learn.adafruit.com/adafruit-ultimate-gps/pinouts
+  * Tutorial   =>      https://learn.adafruit.com/adafruit-ultimate-gps/arduino-wiring
+  * Library    =>      Manage Libraries, search for “Adafruit GPS on the Search box and install the library.
+  *    GPS          ESP32
+  *  1 VIN -------- 5v_USB
+  *  2 GND -------- GND
+  *  3 RX  -------- TX  GPIO 17 / TXD 2
+  *  4 TX  -------- RX  GPIO 16 / RXD 2
+
 */
 
 
 /*************
  * LIBRARIES *
  *************/
+// -------- BME680 --------
+#include <Wire.h> // I2C for BME680 & SGP40
+#include <Adafruit_Sensor.h>
+#include "Adafruit_BME680.h"
+// -------- SGP40 --------
+#include "Adafruit_SGP40.h"
+// -------- SPS30 --------
+#include "sps30.h"
 // -------- GPS --------
 #include <Adafruit_GPS.h>
-#include <SoftwareSerial.h>
-// -------- Multichanel Gas Sensor --------
-#include <Wire.h>
-#include "MutichannelGasSensor.h"
-// -------- BME680 Grove Sensor --------
-#include "seeed_bme680.h"
-// -------- Sensirion SPS30 --------
-#include <sps30.h>
-
 
 /********************
  * GLOBAL CONSTANTS *
  ********************/
+// -------- BME680 --------
+#define SEALEVELPRESSURE_HPA (1013.25) // This variable saves the pressure at the sea level in hectopascal (is equivalent to milibar). This variable is used to estimate the altitude for a given pressure by comparing it with the sea level pressure. This example uses the default value, but for accurate results, replace the value with the current sea level pressure at your location.
+Adafruit_BME680 bme; // Configuration to use I2C
+float t = 0;
+float h = 0;
+// -------- SGP40 --------
+Adafruit_SGP40 sgp;
+// -------- SPS30 --------
+#define SP30_COMMS SERIALPORT1 // To use serial port 1 of the Esp32
+#define TX_PIN 26
+#define RX_PIN 25
+#define DEBUG 0
+bool sps30_OK = false;
+SPS30 sps30;
 // -------- GPS --------
-#define txGpsPin  7 // to TX GPS
-#define rxGpsPin  8 // to RX GPS
-SoftwareSerial mySerial(txGpsPin, rxGpsPin);
-Adafruit_GPS GPS(&mySerial);
-// -------- BME680 Grove Sensor --------
-#define IIC_ADDR  uint8_t(0x76)
-Seeed_BME680 bme680(IIC_ADDR);
-bool conecBME680 = false;
-// -------- Sensirion SPS30 --------
-bool conecSPS30 = false;
-int16_t ret;
-uint8_t auto_clean_days = 4;
-uint32_t auto_clean;
+#define GPSSerial Serial2
+Adafruit_GPS GPS(&GPSSerial);
+#define GPSECHO false
+uint32_t timer = millis();
 
 /*******************************************
  * CODE THAT EXECUTES ONLY ONCE AT STARTUP *
  *******************************************/
-void setup()
-{
+void setup() {
   /*************************
    *  INIT COMMUNICATIONS  *
    *************************/
   // --- Serial ---------------------------------------------------------------------------------------
   Serial.begin(115200);
-    while (!Serial);
-  // --- GPS -------------------------------------------------------------------------------------------
-  GPS.begin(9600); // 9600 NMEA is the default baud rate for Adafruit MTK GPS's- some use 4800  
-  GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA); // This line is to turn on RMC (recommended minimum) and GGA (fix data) including altitude
-  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ); // For the parsing code to work nicely and have time to sort thru the data, and print it out we don't suggest using anything higher than 1 Hz
-  delay(3000);
-  // --- BME680 Grove Sensor ------------------------------------------------------------------------
-  int aux = 0;
-  while (aux <= 2) {
-    if (bme680.init()) {conecBME680 = true; aux=5;} else{conecBME680 = false; aux++;}
-    delay(1000);
-  }
-  // --- Multichanel Gas Sensor ------------------------------------------------------------------------
-  gas.begin(0x04);//the default I2C address of the slave is 0x04
-  gas.powerOn();
-  // --- Sensirion SPS30 ------------------------------------------------------------------------
-  sensirion_i2c_init();
-  aux = 0;
-  while (aux <= 2) {if (sps30_probe() != 0) {conecSPS30 = false; aux++;} else {conecSPS30 = true; aux=5;}
-    delay(500);
-  }
-  if (conecSPS30 == true) {
-    #ifndef PLOTTER_FORMAT
-      //Serial.print(F("SPS sensor probing successful\n"));
-    #endif /* PLOTTER_FORMAT */
-    ret = sps30_set_fan_auto_cleaning_interval_days(auto_clean_days);
-    if (ret) {
-      //Serial.print(F("error setting the auto-clean interval: "));
-      //Serial.println(ret);
-    }
-    ret = sps30_start_measurement();
-    if (ret < 0) {
-      //Serial.print(F("error starting measurement\n"));
-    }
-    #ifndef PLOTTER_FORMAT
-      //Serial.print(F("measurements started\n"));
-    #endif /* PLOTTER_FORMAT */
-    #ifdef SPS30_LIMITED_I2C_BUFFER_SIZE
-      //Serial.print(F("Your Arduino hardware has a limitation that only\n"));
-      //Serial.print(F("  allows reading the mass concentrations. For more\n"));
-      //Serial.print(F("  information, please check\n"));
-      //Serial.print(F("  https://github.com/Sensirion/arduino-sps#esp8266-partial-legacy-support\n"));
-      //Serial.print(F("\n"));
-      //delay(2000);
-    #endif
-  }
+  while (!Serial);
+  // --- BME680 ---------------------------------------------------------------------------------------
+  bme.begin();
+  delay(10);
+  bme.setTemperatureOversampling(BME680_OS_8X); // Set up oversampling and filter initialization (Default values)
+  bme.setHumidityOversampling(BME680_OS_2X);
+  bme.setPressureOversampling(BME680_OS_4X);
+  bme.setIIRFilterSize(BME680_FILTER_SIZE_3);
+  bme.setGasHeater(320, 150); // 320*C for 150 ms
+  // --- SGP40 ---------------------------------------------------------------------------------------
+  sgp.begin();
+  delay(10);
+  // --- SPS30 ---------------------------------------------------------------------------------------
+  sps30.EnableDebugging(DEBUG); // set driver debug level
+  sps30.SetSerialPin(RX_PIN,TX_PIN); // set pins to use for Serial1 on ESP32
+  sps30.begin(SP30_COMMS); // Begin communication channel;
+  sps30.probe(); // check for SPS30 connection
+  sps30.reset(); // reset SPS30 connection
+  if (sps30.start()) {sps30_OK = true;} // start measurement
+  // --- GPS ---------------------------------------------------------------------------------------
+  GPS.begin(9600); // 9600 NMEA is the default baud rate for Adafruit MTK GPS's- some use 4800
+  GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA); // to turn on RMC (recommended minimum) and GGA (fix data) including altitude
+  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ); // 1 Hz update rate (we don't suggest using anything higher than 1 Hz)
+  delay(1000);
 }
 
 /*************************************
@@ -112,159 +129,123 @@ void setup()
  *************************************/
 void loop()
 {
-  delay(20000); // Sends data every +20 seconds
-  Serial.println(F("*{")); // Beginning of the frame to be sent by serial
-
-  /**************************
-   *  READ Sensirion SPS30  *
-   **************************/
-  if (conecSPS30 == true) {
-    struct sps30_measurement m;
-    char serial[SPS30_MAX_SERIAL_LEN];
-    uint16_t data_ready;
-    int16_t ret;
-    do {
-      ret = sps30_read_data_ready(&data_ready);
-      if (ret < 0) {
-        //Serial.print(F("error reading data-ready flag: "));
-        //Serial.println(ret);
-      }
-      else if (!data_ready) {
-        //Serial.print(F("data not ready, no new measurement available\n"));
-      }
-      else {
-        break;
-      }
-      delay(100); /* retry in 100ms */
-    } while (1);
-    ret = sps30_read_measurement(&m);
-    if (ret < 0) {
-      //Serial.print(F("error reading measurement\n"));
-    }
-    else {
-      #ifndef PLOTTER_FORMAT
-        Serial.print(F("\"sps30\":{"));
-        Serial.print(F("\"PM-1.0\":"));Serial.print(m.mc_1p0);Serial.print(F(","));
-        Serial.print(F("\"PM-2.5\":"));Serial.print(m.mc_2p5);Serial.print(F(","));
-        Serial.print(F("\"PM-4.0\":"));Serial.print(m.mc_4p0);Serial.print(F(","));
-        Serial.print(F("\"PM-10\":"));Serial.print(m.mc_10p0);
-        #ifndef SPS30_LIMITED_I2C_BUFFER_SIZE
-          Serial.print(F(","));
-          Serial.print(F("\"NC-0.5\":"));Serial.print(m.nc_0p5);Serial.print(F(","));
-          Serial.print(F("\"NC-1.0\":"));Serial.print(m.nc_1p0);Serial.print(F(","));
-          Serial.print(F("\"NC-2.5\":"));Serial.print(m.nc_2p5);Serial.print(F(","));
-          Serial.print(F("\"NC-4.0\":"));Serial.print(m.nc_4p0);Serial.print(F(","));
-          Serial.print(F("\"NC-10\":"));Serial.print(m.nc_10p0);Serial.print(F(","));
-          Serial.print(F("\"NC-Typical_partical_size\":"));Serial.print(m.typical_particle_size);
-        #endif
-      /*
-      #else
-        // since all values include particles smaller than X, if we want to create buckets we 
-        // need to subtract the smaller particle count. 
-        // This will create buckets (all values in micro meters):
-        // - particles        <= 0,5
-        // - particles > 0.5, <= 1
-        // - particles > 1,   <= 2.5
-        // - particles > 2.5, <= 4
-        // - particles > 4,   <= 10
-        Serial.print(m.nc_0p5);
-        Serial.print(F(" "));
-        Serial.print(m.nc_1p0  - m.nc_0p5);
-        Serial.print(F(" "));
-        Serial.print(m.nc_2p5  - m.nc_1p0);
-        Serial.print(F(" "));
-        Serial.print(m.nc_4p0  - m.nc_2p5);
-        Serial.print(F(" "));
-        Serial.print(m.nc_10p0 - m.nc_4p0);
-        Serial.println();
-      */
-      Serial.println(F("},"));
-      #endif /* PLOTTER_FORMAT */
-    }
-  }
-  else {Serial.print(F("\"sps30\":{\"PM-1.0\":0,\"PM-2.5\":0,\"PM-4.0\":0,\"PM-10.0\":0,\"NC-0.5\":0,\"NC-1.0\":0,\"NC-2.5\":0,\"NC-4.0\":0,\"NC-10.0\":0,\"NC-Typical_partical_size\":0},"));}
-
-  // --- Read Multichanel Gas Sensor ------------------------------------------------------------------------
-  Serial.print(F("\"mgs\":{"));
-  float a;
-  a = gas.measure_NH3(); // units -> ppm
-  Serial.print(F("\"NH3\":"));if (a >= 0) {Serial.print(a);} else {Serial.print(F("0"));}Serial.print(F(","));
-  a = gas.measure_CO(); // units -> ppm
-  Serial.print(F("\"CO\":"));if (a >= 0) {Serial.print(a);} else {Serial.print(F("0"));}Serial.print(F(","));
-  a = gas.measure_NO2(); // units -> ppm
-  Serial.print(F("\"NO2\":"));if (a >= 0) {Serial.print(a);} else {Serial.print(F("0"));}Serial.print(F(","));
-  a = gas.measure_C3H8(); // units -> ppm
-  Serial.print(F("\"C3H8\":"));if (a >= 0) {Serial.print(a);} else {Serial.print(F("0"));}Serial.print(F(","));
-  a = gas.measure_C4H10(); // units -> ppm
-  Serial.print(F("\"C4H10\":"));if (a >= 0) {Serial.print(a);} else {Serial.print(F("0"));}Serial.print(F(","));
-  a = gas.measure_CH4(); // units -> ppm
-  Serial.print(F("\"CH4\":"));if (a >= 0) {Serial.print(a);} else {Serial.print(F("0"));}Serial.print(F(","));
-  a = gas.measure_H2(); // units -> ppm
-  Serial.print(F("\"H2\":"));if (a >= 0) {Serial.print(a);} else {Serial.print(F("0"));}Serial.print(F(","));
-  a = gas.measure_C2H5OH(); // units -> ppm
-  Serial.print(F("\"C2H5OH\":"));if (a >= 0) {Serial.print(a);} else {Serial.print(F("0"));}
-  Serial.println(F("},")); // units -> ppm
-
-  // --- Read BME680 Grove Sensor ------------------------------------------------------------------------
-  if (conecBME680 == true) {
-    if (bme680.read_sensor_data()) {
-      Serial.println(F("\"bme680\":{\"temp\":0,\"pressure\":0,\"humidity\":0,\"gas\":0},"));
-    }
-    else {
-      Serial.print(F("\"bme680\":{"));
-      float b;
-      b = bme680.sensor_result_value.temperature; // units -> °C
-      Serial.print(F("\"temp\":"));Serial.print(b);Serial.print(F(","));
-      b = bme680.sensor_result_value.pressure/1000; // units -> KPa
-      Serial.print(F("\"pressure\":"));Serial.print(b);Serial.print(F(","));
-      b = bme680.sensor_result_value.humidity; // units -> %
-      Serial.print(F("\"humidity\":"));Serial.print(b);Serial.print(F(","));
-      b = bme680.sensor_result_value.gas / 1000; // units -> Kohms
-      Serial.print(F("\"gas\":"));Serial.print(b);
-      Serial.println(F("},"));
-    }
-  }
-  else {Serial.println(F("\"bme680\":{\"temp\":0,\"pressure\":0,\"humidity\":0,\"gas\":0},"));}
-
-  // --- Read CO2-MQ-135 Sensor ------------------------------------------------------------------------
-  float c = analogRead(A0); // units -> ppm
-  Serial.print(F("\"CO2MQ135\":{"));
-  Serial.print(F("\"CO2\":"));Serial.print(c);
-  Serial.println(F("},"));
-  
   /**************
    *  READ GPS  *
    **************/
-  // --- Clear GPS ------
-  char d;
-  for (int i = 0; i <= 2; i++) {
-    while (!GPS.newNMEAreceived()) {
-      d = GPS.read();
+  char c = GPS.read(); // read data from the GPS in the 'main loop'
+  if (GPS.newNMEAreceived()) { // if a sentence is received, we can check the checksum, parse it...
+    if (!GPS.parse(GPS.lastNMEA())) {// this also sets the newNMEAreceived() flag to false
+      return;
     }
-    GPS.parse(GPS.lastNMEA());
   }
-  // --- Read GPS -------
-  if (!GPS.parse(GPS.lastNMEA())) {
-    Serial.println(F("\"gps\":{\"hour\":0,\"minute\":0,\"seconds\":0,\"day\":0,\"month\":0,\"year\":0,\"satellites\":0,\"latitudeDegrees\":0,\"longitudeDegrees\":0,\"altitude\":0}"));
-  }
-  else {
-    if (GPS.fix) {
+  // approximately every 2 seconds or so, print out the current stats
+  if (millis() - timer > 2000) {
+    timer = millis(); // reset the timer
+    Serial.println(F("{")); // Beginning of the frame to be sent by serial
+
+    /***************
+     *  PRINT GPS  *
+     ***************/
+    if (GPS.year>30) {
+      Serial.println(F("\"gps\":{\"hour\":0,\"minute\":0,\"seconds\":0,\"day\":0,\"month\":0,\"year\":0,\"satellites\":0,\"latitudeDegrees\":0,\"longitudeDegrees\":0,\"altitude\":0},"));
+    }
+    else {
       Serial.print(F("\"gps\":{"));
       Serial.print(F("\"hour\":"));Serial.print(GPS.hour);Serial.print(F(","));
       Serial.print(F("\"minute\":"));Serial.print(GPS.minute);Serial.print(F(","));
       Serial.print(F("\"seconds\":"));Serial.print(GPS.seconds);Serial.print(F(","));
       Serial.print(F("\"day\":"));Serial.print(GPS.day);Serial.print(F(","));
       Serial.print(F("\"month\":"));Serial.print(GPS.month);Serial.print(F(","));
-      Serial.print(F("\"year\":"));Serial.print(GPS.year);Serial.print(F(","));
-      Serial.print(F("\"satellites\":"));Serial.print(GPS.satellites);Serial.print(F(","));
-      Serial.print(F("\"latitudeDegrees\":"));Serial.print(GPS.latitudeDegrees,5);Serial.print(F(","));
-      Serial.print(F("\"longitudeDegrees\":"));Serial.print(GPS.longitudeDegrees,5);Serial.print(F(","));
-      Serial.print(F("\"altitude\":"));Serial.print(GPS.altitude);
-      Serial.println(F("}"));
+      Serial.print(F("\"year\":20"));Serial.print(GPS.year);Serial.print(F(","));
+      if (GPS.fix) {
+        Serial.print(F("\"satellites\":"));Serial.print(GPS.satellites);Serial.print(F(","));
+        Serial.print(F("\"latitudeDegrees\":"));Serial.print(GPS.latitudeDegrees,5);Serial.print(F(","));
+        Serial.print(F("\"longitudeDegrees\":"));Serial.print(GPS.longitudeDegrees,5);Serial.print(F(","));
+        Serial.print(F("\"altitude\":"));Serial.print(GPS.altitude);
+        Serial.println(F("},"));
+      }
+      else {
+        Serial.println(F("\"satellites\":0,\"latitudeDegrees\":0,\"longitudeDegrees\":0,\"altitude\":0},"));
+      }
+    }
+
+    // --- Read BME680 Sensor ------------------------------------------------------------------------
+    if (bme.performReading()) {
+      t = bme.temperature;
+      h = bme.humidity;
+      Serial.print(F("\"bme680\":{"));
+      Serial.print(F("\"temp\":"));Serial.print(t);Serial.print(F(",")); // units -> degrees Celsius
+      Serial.print(F("\"pressure\":"));Serial.print(bme.pressure / 100.0);Serial.print(F(",")); // units -> hPa
+      Serial.print(F("\"humidity\":"));Serial.print(h);Serial.print(F(",")); // units -> %
+      Serial.print(F("\"gas\":"));Serial.print(bme.gas_resistance / 1000.0); // units -> KOhms
+      Serial.println(F("},"));
+    }
+    else {Serial.println(F("\"bme680\":{\"temp\":0,\"pressure\":0,\"humidity\":0,\"gas\":0},"));}
+
+    // --- Read SGP40 Sensor ------------------------------------------------------------------------
+    if (t == 0 && h == 0) {
+      uint16_t raw;
+      raw = sgp.measureRaw();
+      Serial.print(F("\"sgp40\":{"));
+      Serial.print(F("\"raw\":"));Serial.print(raw);Serial.print(F(",")); // units -> reference value
+      Serial.print(F("\"vocIndex\":0")); // units -> reference value
+      Serial.println(F("},"));
     }
     else {
-      Serial.println(F("\"gps\":{\"hour\":0,\"minute\":0,\"seconds\":0,\"day\":0,\"month\":0,\"year\":0,\"satellites\":0,\"latitudeDegrees\":0,\"longitudeDegrees\":0,\"altitude\":0}"));
+      uint16_t sraw;
+      int32_t voc_index;
+      sraw = sgp.measureRaw(t, h);
+      voc_index = sgp.measureVocIndex(t, h);
+      Serial.print(F("\"sgp40\":{"));
+      Serial.print(F("\"raw\":"));Serial.print(sraw);Serial.print(F(",")); // units -> reference value
+      Serial.print(F("\"vocIndex\":"));Serial.print(voc_index); // units -> reference value
+      Serial.println(F("},"));
     }
+    /**************************
+     *  READ Sensirion SPS30  *
+     **************************/
+    if (sps30_OK == true) {
+      // --- Read Sensor SPS30 ---------------------------------------------------------------------------------------
+      struct sps_values val;
+      uint8_t ret = sps30.GetValues(&val);
+      if (ret == SPS30_ERR_DATALENGTH) { // data might not have been ready
+        sps30_OK = false;
+      }
+      else if(ret != SPS30_ERR_OK) { // if other error
+        sps30_OK = false;
+      }
+      // --- Print readings Sensor SPS30 ---------------------------------------------------------------------------------------
+      if (sps30_OK == true) {
+        Serial.print(F("\"sps30\":{"));
+        Serial.print(F("\"PM-1.0\":"));Serial.print(val.MassPM1);Serial.print(F(",")); // Units (μg/m3)
+        Serial.print(F("\"PM-2.5\":"));Serial.print(val.MassPM2);Serial.print(F(",")); // Units (μg/m3)
+        Serial.print(F("\"PM-4.0\":"));Serial.print(val.MassPM4);Serial.print(F(",")); // Units (μg/m3)
+        Serial.print(F("\"PM-10\":"));Serial.print(val.MassPM10);Serial.print(F(",")); // Units (μg/m3)
+        Serial.print(F("\"NC-0.5\":"));Serial.print(val.NumPM0);Serial.print(F(",")); // Units (#/cm3)
+        Serial.print(F("\"NC-1.0\":"));Serial.print(val.NumPM1);Serial.print(F(",")); // Units (#/cm3)
+        Serial.print(F("\"NC-2.5\":"));Serial.print(val.NumPM2);Serial.print(F(",")); // Units (#/cm3)
+        Serial.print(F("\"NC-4.0\":"));Serial.print(val.NumPM4);Serial.print(F(",")); // Units (#/cm3)
+        Serial.print(F("\"NC-10\":"));Serial.print(val.NumPM10);Serial.print(F(",")); // Units (#/cm3)
+        Serial.print(F("\"NC-Typical_partical_size\":"));Serial.print(val.PartSize); // Units (μm)
+        Serial.println(F("}"));
+      }
+      else {
+        Serial.print(F("\"sps30\":{\"PM-1.0\":0,\"PM-2.5\":0,\"PM-4.0\":0,\"PM-10\":0,\"NC-0.5\":0,\"NC-1.0\":0,\"NC-2.5\":0,\"NC-4.0\":0,\"NC-10\":0,\"NC-Typical_partical_size\":0}"));
+      }
+    }
+
+
+
+    Serial.println(F("}")); // End of frame
+
+
   }
-  Serial.println(F("}*")); // End of frame
+
+
+
+
+
+  
+
+  
 }
